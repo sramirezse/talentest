@@ -11,7 +11,7 @@
       "
     >
 
-      <MainContent ></MainContent>
+      <MainContent v-if="user" :logout="logout" ></MainContent>
       <div class="container">
         <router-view></router-view>
       </div>
@@ -23,6 +23,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import Cookies from 'js-cookie'
 
 import Sidebar from "./Sidebar.vue";
 import MainContent from "./Content";
@@ -38,12 +39,27 @@ export default {
     user: "auth/user",
   }),
   methods: {
+    async getUser() {
+      await this.$store.dispatch('auth/fetchUser').then(
+        (res) => {
+
+            },
+        (err) => {
+        console.log(err);
+          Cookies.remove("token");
+        }
+      );
+    },
     async logout() {
       // Log out the user.
       await this.$store.dispatch("auth/logout");
       // Redirect to login.
-      this.$router.push({ name: "login" });
+        this.$router.push({ name: "Login" });
     },
+  },
+  mounted() {
+    this.getUser();
+    // console.log('Hola mundo');
   },
 };
 </script>

@@ -5,7 +5,7 @@
  */
 
 
-window.Vue = require('vue');
+window.App = require('vue');
 import vueKanban from 'vue-kanban';
 import router from './router/index';
 import store from './store/index'
@@ -23,18 +23,18 @@ import './plugins'
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('Layout', require('./Layout/Index.vue').default);
-Vue.use(vueKanban);
-Vue.use(router);
-Vue.use(store);
+App.component('example-component', require('./components/ExampleComponent.vue').default);
+App.component('Layout', require('./Layout/Index.vue').default);
+App.use(vueKanban);
+App.use(router);
+App.use(store);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-new Vue({
+new App({
     el: '#app',
     router,
     store

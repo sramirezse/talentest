@@ -23,9 +23,7 @@ class AuthController extends Controller
             'password' => bcrypt($request->password),
         ]);
         $user->save();
-        return response()->json([
-            'message' => 'Successfully created user!'
-        ], 201);
+        return redirect('/dashboard/login');
     }
 
     public function login(Request $request)
@@ -62,7 +60,6 @@ class AuthController extends Controller
 
 
     }
-
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();

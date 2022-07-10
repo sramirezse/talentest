@@ -15,7 +15,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('auth/register', function () {
+Route::get('/login', function () {
+    return redirect('dashboard/login');
+});
+Route::get('register', function () {
     return view('auth.register');
 });
-// Auth::routes();
+
+Route::post('register', 'AuthController@signup')->name('register');

@@ -74,27 +74,44 @@
 
 <script>
 export default {
-    data() {
-        return {
-            formData: {
-                email: '',
-                password: '',
-            },
-        };
-    },
-    methods:{
-        async login() {
-            try {
-                await this.$store.dispatch('auth/login', this.formData);
-                this.$router.push({ name: 'Tablero' });
-            } catch (error) {
-                console.log(error);
-            }
+  data() {
+    return {
+      formData: {
+        email: "",
+        password: "",
+      },
+    };
+  },
+  methods: {
+    async login() {
+      // Submit the form.
+      this.loading = true;
+      await this.$store.dispatch("auth/login", this.formData).then(
+        (res) => {
+            console.log(res);
+
+          // Fetch the user.
+          if (res.status === 200) {
+            this.$store.dispatch("auth/fetchUser");
+            this.loading = false;
+
+            this.$router.push({ name: "Tablero" });
+          }else{
+            this.loading = false;
+            alert("Usuario o contraseña incorrectos");
+          }
+        },
+        (err) => {
+          this.loading = false;
+          alert("Usuario o contraseña incorrectos");
         }
-    }
+      );
+      await this.$store.dispatch("auth/fetchUser");
+    },
+  },
 };
 </script>
 
 <style scoped>
-@import url('../../../css/login.css');
+@import url("../../../css/login.css");
 </style>

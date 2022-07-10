@@ -10,15 +10,23 @@ const routes = [
         name: 'Tablero',
         component: Index,
         meta:{
-            title: 'Tablero',
+            title: 'Inicio',
         }
     },
     {
-        path: '/other',
-        name: 'Other',
+        path: '/kanban',
+        name: 'Kanban',
         component: Other,
         meta:{
-            title: 'Otro',
+            title: 'Kanban',
+        }
+    },
+    {
+        path: '/kanban2',
+        name: 'Kanban2',
+        component: Other,
+        meta:{
+            title: 'Kanban2',
         }
     },
 

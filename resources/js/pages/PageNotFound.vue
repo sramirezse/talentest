@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="container">
-            <h1>NotFound</h1>
+            <h1>no funciona</h1>
         </div>
     </div>
 </template>

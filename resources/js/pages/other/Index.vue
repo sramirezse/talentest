@@ -1,42 +1,121 @@
 <template>
-  <kanban-board :stages="stages" :blocks="blocks">
-    <div v-for="stage in stages" :slot="stage" :key="stage">
-      <h2>{{ stage }}</h2>
-    </div>
-    <div v-for="block in blocks" :slot="block.id" :key="block.id">
-      <div><strong>id:</strong> {{ block.id }}</div>
-      <p>
-        {{ block.title }}
-      </p>
-    </div>
-  </kanban-board>
+  <div>
+    <kanban-board @update-block="updateBlock" :stages="stages" :blocks="blocks">
+      <div v-for="stage in stages" :slot="stage" :key="stage">
+        <div class="row">
+          <div class="col-10">
+            <h2>{{ stage }}</h2>
+          </div>
+          <button
+            class="col-2 btn btn-add-card"
+            data-toggle="modal"
+            data-backdrop="false"
+            data-target="#modal-default"
+            @click="setState(stage)"
+          >
+            <i class="fas fa-plus-circle"></i>
+          </button>
+          <ModalDefault :closeAction="closeModal" :buttonShow="false">
+            <div slot="body">
+              <div class="form-group">
+                <label>Titulo</label>
+                <input type="text" class="form-control" v-model="block.title" />
+              </div>
+              <div class="form-group">
+                <label>Contenido</label>
+                <textarea
+                  class="form-control"
+                  rows="3"
+                  v-model="block.content"
+                ></textarea>
+              </div>
+            </div>
+            <div slot="buttons">
+              <button type="button" class="btn btn-primary" @click="newBlock">
+                Agregar
+              </button>
+            </div>
+          </ModalDefault>
+        </div>
+      </div>
+      <div v-for="block in blocks" :slot="block.id" :key="block.id">
+        <button @click="setBlock(block, true)" class="btn text-left">
+          <div><strong>id:</strong> {{ block.id }}</div>
+          <p>
+            {{ block.title }}
+          </p>
+        </button>
+      </div>
+    </kanban-board>
+  </div>
 </template>
 
 <script>
-import Axios from 'axios';
-
+import { mapState } from "vuex";
+import Modal from "../../components/Modal";
 export default {
+  components: {
+    ModalDefault: Modal,
+  },
   data() {
     return {
-      stages: ["buffer", "working", "done"],
-      blocks: [
-        {
-          id: 1,
-          status: "buffer",
-          title: "Test",
-        },
-      ],
+      block: {
+        id: 0,
+        step_id: "",
+        title: "",
+        content: "",
+        status: "",
+      },
     };
   },
+
+  computed: {
+    ...mapState({
+      blocks: (state) => state.blocks.blocks,
+      stages: (state) => state.blocks.steps,
+    }),
+  },
   methods: {
-    getUser() {
-      Axios.get('/api/user').then(response => {
-        console.log(response.data);
+    updateBlock(id, status) {
+      const block = this.blocks.find((b) => b.id === Number(id));
+      this.setBlock(block, false);
+      this.newBlock();
+    },
+    async newBlock() {
+      await this.$store.dispatch("blocks/save", this.block).then((res) => {
+        $("#modal-default").modal("hide");
+        this.fetchBlocks();
+        this.resetFields();
+        alert("Guardado");
       });
+    },
+    async fetchBlocks() {
+      const data = await this.$store.dispatch("blocks/fetch").then((res) => {
+        console.log("res", res);
+        return res;
+      });
+    },
+    resetFields() {
+      Object.assign(this.$data, this.$options.data.call(this));
+    },
+    closeModal() {
+      console.log("close");
+    },
+    setBlock(block, modal = false) {
+      console.log("setBlockId", block);
+      this.block = block;
+      this.block.step_id = block.status;
+      if (modal) {
+        $("#modal-default").modal("show");
+      }
+    },
+    setState(id) {
+      this.block.step_id = id;
+      console.log(this.block.step_id);
     },
   },
   mounted() {
-    this.getUser();
+    this.fetchBlocks();
   },
 };
 </script>
@@ -61,10 +140,14 @@ body {
 h2 {
   color: white;
 }
+.btn-add-card {
+  padding: 0;
+  margin-bottom: 0;
+}
 
 .drag-column {
-    background-color: #d6d9dc;
-    border-radius: 10px;
+  background-color: #d6d9dc;
+  border-radius: 10px;
   .drag-column-header > div {
     width: 100%;
     h2 > a {

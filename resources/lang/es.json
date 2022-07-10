@@ -7,5 +7,6 @@
     "Register": "Registrarse",
     "Name": "Nombre",
     "Confirm Password": "Confirmar contraseña",
-    "Send Password Reset Link": "Restablecer contraseña"
+    "Send Password Reset Link": "Restablecer contraseña",
+    "You are registered!": "¡Te has registrado!"
 }

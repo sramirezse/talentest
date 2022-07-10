@@ -30,9 +30,7 @@
       ></i>
       <a class="navbar-brand m-0" href="#" target="_blank">
         <img src="/logo.png" class="navbar-brand-img h-100" alt="main_logo" />
-        <span class="ms-1 font-weight-bold text-white"
-          ></span
-        >
+        <span class="ms-1 font-weight-bold text-white">Tablero</span>
       </a>
     </div>
     <hr class="horizontal light mt-0 mb-2" />
@@ -44,7 +42,7 @@
       <ul class="navbar-nav">
         <li class="nav-item" v-for="(item, index) in items" :key="index">
           <router-link
-            class="nav-link text-white  "
+            class="nav-link text-white"
             :class="currentRoute == item.path ? 'bg-gradient-primary' : ''"
             :to="item.path"
           >
@@ -59,7 +57,7 @@
             >
               <i class="material-icons opacity-10">dashboard</i>
             </div>
-            <span class="nav-link-text ms-1">{{ item.name }}</span>
+            <span class="nav-link-text ms-1">{{ item.meta.title }}</span>
           </router-link>
         </li>
       </ul>
@@ -80,14 +78,13 @@ export default {
   data() {
     return {
       isOpen: false,
-      items: []
+      items: [],
     };
   },
   created() {
     this.items = this.$router.options.routes.filter(
-      (route) => route.name !== "PageNotFound"
+      (route) => route.name !== "PageNotFound" && route.name !== "Login"
     );
-
   },
   computed: {
     currentRoute() {

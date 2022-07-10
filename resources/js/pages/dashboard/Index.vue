@@ -8,7 +8,7 @@
 export default {
     methods: {
         async getUser() {
-            await this.$store.dispatch('auth/fetchUser');
+            // await this.$store.dispatch('auth/fetchUser');
         },
     },
     mounted() {
