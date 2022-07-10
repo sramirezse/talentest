@@ -19,7 +19,7 @@
             <div slot="body">
               <div class="form-group">
                 <label>Titulo</label>
-                <input type="text" class="form-control" v-model="block.title" />
+                <input class="form-control" type="text" v-model="block.title" />
               </div>
               <div class="form-group">
                 <label>Contenido</label>
@@ -28,6 +28,10 @@
                   rows="3"
                   v-model="block.content"
                 ></textarea>
+              </div>
+              <div class="form-group">
+                <label>fecha</label>
+                <input class="form-control" type="date" v-model="block.limit_date">
               </div>
             </div>
             <div slot="buttons">
@@ -38,11 +42,11 @@
           </ModalDefault>
         </div>
       </div>
-      <div v-for="block in blocks" :slot="block.id" :key="block.id">
+      <div :class="block.color == 'success' ? '': 'bg-danger'"  v-for="block in blocks" :slot="block.id" :key="block.id">
         <button @click="setBlock(block, true)" class="btn text-left">
-          <div><strong>id:</strong> {{ block.id }}</div>
+          <div><strong>Título:</strong> {{ block.title}}</div>
           <p>
-            {{ block.title }}
+            {{block.content  }}
           </p>
         </button>
       </div>
@@ -65,6 +69,8 @@ export default {
         title: "",
         content: "",
         status: "",
+        date: "",
+        limit_date : "",
       },
     };
   },
@@ -77,8 +83,14 @@ export default {
   },
   methods: {
     updateBlock(id, status) {
+        console.log(id, status);
+        if(status == 'done'){
+            alert('Felicitaciones por lograrlo!');
+        }
       const block = this.blocks.find((b) => b.id === Number(id));
+      console.log('block',block);
       this.setBlock(block, false);
+      this.setState(status);
       this.newBlock();
     },
     async newBlock() {
@@ -86,7 +98,7 @@ export default {
         $("#modal-default").modal("hide");
         this.fetchBlocks();
         this.resetFields();
-        alert("Guardado");
+        // alert("Guardado");
       });
     },
     async fetchBlocks() {
@@ -124,6 +136,7 @@ export default {
 $buffer: #fb7d44;
 $working: #2a92bf;
 $done: #00b961;
+$canceled: #f44336;
 
 * {
   box-sizing: border-box;

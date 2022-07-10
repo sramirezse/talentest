@@ -24,6 +24,7 @@ class CardRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
+            'limit_date' => 'required|date',
             'content' => 'required|string|',
             'step_id' => 'required',
         ];
